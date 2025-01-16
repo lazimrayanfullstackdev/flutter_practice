@@ -17,7 +17,9 @@ void main(){
        child: Column(
        mainAxisAlignment: MainAxisAlignment.center,
        children: [
-         Row(
+         SingleChildScrollView(
+           scrollDirection: Axis.horizontal,
+          child: Row(
            children: [
              Text("Text 1",style: TextStyle(
                fontSize: 25,
@@ -31,8 +33,25 @@ void main(){
                fontSize: 25,
                color: Colors.black,
              ),),
-           ],
+             Text("Text 2",style: TextStyle(
+         fontSize: 25,
+         color: Colors.black,
+       ),),
+             Text("Text 3",style: TextStyle(
+         fontSize: 25,
+         color: Colors.black,
+       ),),
+             Text("Text 2",style: TextStyle(
+         fontSize: 25,
+         color: Colors.black,
+       ),),
+             Text("Text 3",style: TextStyle(
+         fontSize: 25,
+         color: Colors.black,
+       ),),
+       ],
          ),
+   ),
          Text("Text 5",style: TextStyle(
        fontSize: 25,
        color: Colors.black,
@@ -197,7 +216,7 @@ void main(){
            fontSize: 25,
            color: Colors.black,
          ),),
-       ],
+         ],
      ),
    ),
  )
