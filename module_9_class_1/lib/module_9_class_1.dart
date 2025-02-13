@@ -111,3 +111,27 @@ class LayoutBuilderExample extends StatelessWidget{
     );
   }
 }
+
+class AspectRatioExample extends StatelessWidget{
+  const AspectRatioExample({super.key});
+  
+  @override
+  Widget build (BuildContext context){
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.red,
+        title: Text("Aspect Ratio Example"),
+      ),
+      body: Column(
+        children: [
+          Container(
+            child: AspectRatio(
+                aspectRatio: 16/9,
+            ),
+          ),
+        ],
+      )
+        
+    );
+  }
+}
