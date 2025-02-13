@@ -10,7 +10,7 @@ class Myapp extends StatefulWidget{
   const Myapp({super.key});
 
   @override
-  State<Myapp> createState() => bottomSheet();
+  State<Myapp> createState() => _customWidget();
 }
 
 class _snackbarState extends State<Myapp>{
@@ -81,6 +81,39 @@ class bottomSheet extends State<Myapp>{
                 }
             );
           }, child: Text("Botton Sheet"))
+        ],
+      ),
+    );
+  }
+}
+
+class _customWidget extends State<Myapp>{
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Custom Widget"),
+        backgroundColor: Colors.yellow,
+        foregroundColor: Colors.blueGrey,
+      ),
+      body: Row(
+        children: [
+          Container(
+            height: 200,
+            width: 100,
+            decoration: BoxDecoration(
+              color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              children: [
+                Image.network('https://i0.wp.com/singaporeglobalnetwork.gov.sg/wp-content/uploads/2023/09/6reasonswhysg-hero.jpeg?fit=1500%2C1000&ssl=1'),
+                Text("Singapore",style: TextStyle(fontSize: 16),),
+                SizedBox(height: 5,),
+                Text("Singapore is a very beautiful city, you must visit singapore"),
+              ],
+            ),
+          )
         ],
       ),
     );
