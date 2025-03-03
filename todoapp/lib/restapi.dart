@@ -13,9 +13,16 @@ class restapi extends StatefulWidget {
 class _restapiState extends State<restapi> {
   
   List users = [];
+  bool isloading = false;
   
   Future<void> fetchUsers() async{
+    setState(() {
+      isloading = true;
+    });
     final response = await http.get(Uri.parse("https://jsonplaceholder.typicode.com/users"));
+    setState(() {
+      isloading = false;
+    });
     print(response.body);
     print(response.statusCode);
     if(response.statusCode == 200){
@@ -39,7 +46,9 @@ class _restapiState extends State<restapi> {
         title: Text("Rest Api",style: TextStyle(color: Colors.white, fontSize: 27),),
         backgroundColor: Colors.deepPurple,
       ),
-      body: ListView.builder(
+      body: isloading ?  Center(
+        child: CircularProgressIndicator(),
+      ) :ListView.builder(
           itemCount: users.length,
           itemBuilder: (context, index){
             final user = users[index];
