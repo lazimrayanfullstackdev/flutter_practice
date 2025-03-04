@@ -32,15 +32,15 @@ class _ApiCrudState extends State<ApiCrud> {
             ),
           ),
           TextField(
-            controller: productCodeController,
-            decoration: InputDecoration(
-                labelText: "Product Code"
-            ),
-          ),
-          TextField(
             controller: productImageController,
             decoration: InputDecoration(
                 labelText: "Product Image"
+            ),
+          ),
+          TextField(
+            controller: productCodeController,
+            decoration: InputDecoration(
+                labelText: "Product Code"
             ),
           ),
           TextField(
@@ -66,7 +66,13 @@ class _ApiCrudState extends State<ApiCrud> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ElevatedButton(onPressed: (){}, child: Text("Add Product", style: TextStyle(color: Colors.white),), style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),),
+              ElevatedButton(onPressed: (){
+                setState(() {
+                  productController.createProduct(productNameController.text, productImageController.text, productCodeController.text, int.parse(productQtyController.text), int.parse(productUnitPriceController.text), int.parse(productTotalPriceController.text));
+                  fetchData();
+                  Navigator.pop(context);
+                });
+              }, child: Text("Add Product", style: TextStyle(color: Colors.white),), style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),),
               SizedBox(width: 10,),
               TextButton(onPressed: (){
                 Navigator.pop(context);
