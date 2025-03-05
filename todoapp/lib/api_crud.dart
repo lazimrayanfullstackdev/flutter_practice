@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/ProductController.dart';
+import 'package:todoapp/widget/product_card.dart';
 
 class ApiCrud extends StatefulWidget {
   const ApiCrud({super.key});
@@ -23,11 +24,11 @@ class _ApiCrudState extends State<ApiCrud> {
     TextEditingController productTotalPriceController = TextEditingController();
 
     productNameController.text = name ?? "";
-    productQtyController.text = qty.toString() ?? '';
+    productQtyController.text = qty != null ? qty.toString() : '0';
     productImageController.text = img ?? '';
-    productCodeController.text = code.toString() ?? '';
-    productUnitPriceController.text = unitPrice.toString() ?? '';
-    productTotalPriceController.text = totalPrice.toString() ?? '';
+    productCodeController.text = code != null ? code.toString() : '0';
+    productUnitPriceController.text = unitPrice!= null ? unitPrice.toString() : '0';
+    productTotalPriceController.text = totalPrice!= null ? totalPrice.toString() : '0';
 
 
     showDialog(context:  context, builder: (context) =>AlertDialog(
@@ -113,67 +114,108 @@ class _ApiCrudState extends State<ApiCrud> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         title: Text('Products'),
         backgroundColor: Colors.orange,
         centerTitle: true,
       ),
-      body: ListView.builder(
-          itemCount: productController.products.length,
-          itemBuilder: (context, index){
-            var product = productController.products[index];
-            return Card(
-              elevation: 4,
-              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: ListTile(
-                leading: Image.network(product.img.toString(), width: 50,),
-                title: Text(product.productName.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                subtitle: Text('Price: \$${product.unitPrice}  | Qty: ${product.qty}', style: TextStyle(),),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(onPressed: ()=>productDialog(
-                        id : product.sId,
-                        code: product.productCode,
-                        name: product.productName ,
-                        qty: product.qty,
-                        img: product.img,
-                        unitPrice: product.unitPrice,
-                        totalPrice: product.totalPrice,
-                    ), icon: Icon(Icons.edit)),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    IconButton(onPressed: (){
-                      setState(() {
-                        productController.deleteProduct(product.sId.toString()).then((value){
-                          if(value){
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Product Deleted"),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                          }else{
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Something went wrong, try again"),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                          }
-                        });
-                      });
-
-                    }, icon: Icon(Icons.delete, color: Colors.red,))
-                  ],
-                ),
-              ),
-            );
-          }
-
+      body: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: 0.75,
+        ),
+        itemCount: productController.products.length,
+        itemBuilder: (context, index) {
+          var product = productController.products[index];
+          return ProductCard(
+            product: product,
+            onEdit: () {
+              productDialog(
+                id: product.sId,
+                code: product.productCode,
+                name: product.productName,
+                qty: product.qty,
+                img: product.img,
+                unitPrice: product.unitPrice,
+                totalPrice: product.totalPrice,
+              );
+            },
+            onDelete: () {
+              productController.deleteProduct(product.sId.toString()).then((value) {
+                if (value) {
+                  fetchData();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Product Deleted"), duration: Duration(seconds: 2)),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Something went wrong, try again"), duration: Duration(seconds: 2)),
+                  );
+                }
+              });
+            } ,
+          );
+        },
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () => productDialog(), child: Icon(Icons.add),),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => productDialog(),
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
+//
+// Card(
+// elevation: 4,
+// margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+// child: ListTile(
+// leading: Image.network(product.img.toString(), width: 50,),
+// title: Text(product.productName.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+// subtitle: Text('Price: \$${product.unitPrice}  | Qty: ${product.qty}', style: TextStyle(),),
+// trailing: Row(
+// mainAxisSize: MainAxisSize.min,
+// children: [
+// IconButton(onPressed: ()=>productDialog(
+// id : product.sId,
+// code: product.productCode,
+// name: product.productName ,
+// qty: product.qty,
+// img: product.img,
+// unitPrice: product.unitPrice,
+// totalPrice: product.totalPrice,
+// ), icon: Icon(Icons.edit),
+// ),
+// SizedBox(
+// width: 10,
+// ),
+// IconButton(onPressed: (){
+// productController.deleteProduct(product.sId.toString()).then((value){
+// if(value){
+// setState(() {
+// fetchData();
+// });
+// ScaffoldMessenger.of(context).showSnackBar(
+// SnackBar(
+// content: Text("Product Deleted"),
+// duration: Duration(seconds: 2),
+// ),
+// );
+// }else{
+// ScaffoldMessenger.of(context).showSnackBar(
+// SnackBar(
+// content: Text("Something went wrong, try again"),
+// duration: Duration(seconds: 2),
+// ),
+// );
+// }
+// });
+// }
+//
+// , icon: Icon(Icons.delete, color: Colors.red,))
+// ],
+// ),
+// ),
+// )
